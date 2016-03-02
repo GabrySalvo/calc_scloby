@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Calcolatrice</title>
+	
+	<style type="text/css" media="screen">
+		table {
+			border-left: 1px solid black;
+			border-right: 1px solid black;
+			border-bottom: 1px solid black;
+			border-top: 1px solid black;
+		}
+	</style>
+
+    <!-- Bootstrap css -->
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<!-- Jquery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<!-- Bootstrap js -->
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		var operando=0.0;
+		var totale=0.0;
+		var segno_prec="";
+		var esponente=0;
+		
+		var cancella=function(){
+			operando=0;
+			totale=0;
+			segno_prec="";
+			esponente=0;
+			document.getElementById("Output").innerHTML = totale;
+		}
+		
+		var virgola=function(){
+			esponente=-1;
+		}
+		
+		var oper_prec = function(){
+			switch(segno_prec) {
+			case "":
+				totale=operando;
+				operando=0;
+				esponente=0;
+				break;
+			case "=":
+				totale+=operando;
+				operando=0;
+				esponente=0;
+				break;
+			case "+":
+				totale=totale+operando;
+				operando=0;
+				esponente=0;
+				break;
+			case "-":
+				totale=totale-operando;
+				operando=0;
+				esponente=0;
+				break;
+			case "/":
+				if(operando!=0){
+					totale=totale/operando;
+					operando=0;
+					esponente=0;
+				}
+				else{
+					alert("Impossibile eseguire una divisione per zero");
+				}
+				break;
+			case "x":
+				totale=totale*operando;
+				operando=0;
+				esponente=0;
+				break;
+			}
+		}
+		var bottone_numero= function(valore){
+			if(esponente == 0){
+				operando=(operando*10)+valore;
+			}
+			else{
+				operando = operando + valore*Math.pow(10,esponente);
+				console.log(operando);
+				esponente--;
+			}
+			//se premo un numero dopo l'uguale non continuo l'operazione precedente
+			if(segno_prec == "="){
+				segno_prec="";
+			}
+			//visualizzo a schermo il nuovo valore
+			document.getElementById("Output").innerHTML = operando;
+		}
+		var bottone_op=function(segno){
+			switch(segno) {
+			case "=":
+				//visualizzo a schermo il risultato
+				oper_prec();
+				segno_prec="=";
+				document.getElementById("Output").innerHTML = totale;
+				break;
+			case "+":
+				oper_prec();
+				segno_prec="+";
+				document.getElementById("Output").innerHTML = totale;
+				break;
+			case "-":
+				oper_prec();
+				segno_prec="-";
+				document.getElementById("Output").innerHTML = totale;
+				break;
+			case "/":
+				oper_prec();
+				segno_prec="/";
+				document.getElementById("Output").innerHTML = totale;
+				break;
+			case "x":
+				oper_prec();
+				segno_prec="x";
+				document.getElementById("Output").innerHTML = totale;
+				break;
+			}
+		}
+	</script>
+  </head>
+  <body>
+    <h1>Calcolatrice</h1>
+	<h2>Autore: Gabriele Salvo</h2>
+	<table width="135" height="200" >
+		<tr>
+			<td align="left">
+			<div size="15"> <output id="Output" type="text" size="15"  maxlength="12"  /> 0 </div>
+	<div class="btn-group" data-toggle="buttons">
+		<button class="btn btn-primary"  onClick="bottone_numero(1)"> 1 </button>
+		<button class="btn btn-primary"  onClick="bottone_numero(2)"> 2 </button>
+		<button class="btn btn-primary"  onClick="bottone_numero(3)"> 3 </button>
+		<button class="btn btn-primary"  onClick="bottone_op('+')"> + </button>
+	</div>
+	<br>
+	
+	<div class="btn-group" data-toggle="buttons" >
+		<button class="btn btn-primary"  onClick="bottone_numero(4)"> 4 </button>
+		<button class="btn btn-primary"  onclick="bottone_numero(5)"> 5 </button>
+		<button class="btn btn-primary"  onClick="bottone_numero(6)"> 6 </button>
+		<button class="btn btn-primary"  onClick="bottone_op('-')"> - </button>
+	</div>
+	<br>
+	
+	<div class="btn-group" data-toggle="buttons">
+		<button class="btn btn-primary"  onClick="bottone_numero(7)"> 7 </button>
+		<button class="btn btn-primary"  onClick="bottone_numero(8)"> 8 </button>
+		<button class="btn btn-primary"  onClick="bottone_numero(9)"> 9 </button>
+		<button class="btn btn-primary"  onClick="bottone_op('x')"> x </button>
+	</div>
+	<br>
+	<div class="btn-group" data-toggle="buttons">
+		<button class="btn btn-primary"  onclick="virgola()"> , </button>
+		<button class="btn btn-primary"  onClick="bottone_numero(0)"> 0 </button>
+		<button class="btn btn-primary"  onClick="bottone_op('=')"> = </button>
+		<button class="btn btn-primary"  onClick="bottone_op('/')"> / </button>
+	</div>
+	<br>
+	<button class="btn btn-primary" onclick="cancella()"> CANCELLA </button>
+			</td>
+		</tr>
+	</table>
+	
+  </body>
+</html>
